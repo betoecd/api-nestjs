@@ -10,3 +10,22 @@ services:
       - 3000:3000
     volumes:
       - .:/home/node/app
+
+  db:
+    build: ./.docker/postgres
+    restart: always
+    tty: true
+    volumes:
+      - ./.docker/dbdata:/var/lib/postgresql/data
+    env_file:
+      - ./.docker/postgres/db.env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    tty: true
+    env_file:
+      - ./.docker/postgres/pgadmin.env
+    ports:
+      - 9000:80
+    depends_on:
+      - db
